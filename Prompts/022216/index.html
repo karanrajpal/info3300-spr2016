@@ -38,6 +38,8 @@ var usdaAtlas;
 var digitScale = d3.scale.category10()
 var populationScale = d3.scale.linear().domain([-5, 0, 5]).range(["#d8b365", "#f5f5f5", "#5ab4ac"]);
 
+// This is a piecewise linear function.
+
 d3.json("us.json", function(error, shapes) {
 	counties = topojson.feature(shapes, shapes.objects.counties).features;
 	states = topojson.feature(shapes, shapes.objects.states).features;
@@ -51,7 +53,7 @@ d3.json("us.json", function(error, shapes) {
 	countyPaths.selectAll("path").data(counties).enter()
 	.append("path")
 	.attr("d", path)
-	.style("fill", function (county) { return digitScale(0); })
+	.style("fill", function (county) { return digitScale(Math.floor(county.id / 10000)); })
 	.style("stroke", "none");
 
 	var statePaths = svg.append("g");
@@ -67,10 +69,13 @@ d3.json("us.json", function(error, shapes) {
 		// what should we do with the CSV data?
 		usdaAtlas = d3.map(rows, function (county) { return Number(county.FIPS); });
 		
-		//countyPaths.selectAll("path")
-		//.style("fill", function (county) {
+		countyPaths.selectAll("path")
+		.style("fill", function (county) {
 			// set fill based on county attributes
-		//});
+			var countyData = usdaAtlas.get(county.id);
+			if(!countyData) { return "none"; }
+			return populationScale(countyData.PopChangeRate1014 - 0.4*countyData.PopChangeRate0010);
+		});
 		
 	});
 	
