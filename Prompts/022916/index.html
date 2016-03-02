@@ -4,7 +4,7 @@
 <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
 <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 <style>
-body { font-family: "Open Sans"; }
+body { font-family: "Futura"; }
 svg { margin: 20px; background-color: #eee; }
 .bar rect { fill: #ccc; }
 .axis path { fill: none; stroke: black;}
@@ -59,15 +59,16 @@ var xScale = d3.scale.linear()
 
 // We'll replace the 0s with functions
 punctCounts.keys.forEach(function (p) {
-	svg.append("text").attr("x", 0)
-	.attr("y", 0)
+	svg.append("text").attr("x", xScale(0)-padding / 2)
+	.attr("y", yPoints(p))
 	.text(p);
 	
 	svg.append("rect")
-	.attr("x", 0)
-	.attr("y", 0)
-	.attr("height", 0)
-	.attr("width", 0);
+	.attr("x", xScale(0))
+	.attr("y", yBands(p))
+	.attr("class","dullorange")
+	.attr("height", yBands.rangeBand())
+	.attr("width", xScale(punctCounts.count[p]) - xScale(0));  // We don't want the position calculation of scale so we offset it by subtracting from width
 });
 
 
