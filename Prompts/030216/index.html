@@ -1,7 +1,7 @@
 <html>
 <head>
 <!-- Load the d3 library. -->
-<script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 <style>
 body { font-family: "Open Sans"; }
@@ -52,19 +52,34 @@ function histogram(bins) {
 	bins.forEach(function (bin) {
 		svg.append("rect").attr("class", "bar")
 		.attr("x", xBands(bin.x))
-		.attr("y", 0)
+		.attr("y", yScale(bin.y))
 		.attr("width", xBands.rangeBand())
-		.attr("height", 0);
+		.attr("height", yScale(0) - yScale(bin.y));
 	});
 }
 
+var poissons = [];
+for (var i = 0; i < 100; i++) {
+	poissons.push(randomPoisson(2));
+}
 var randomNumbers = [];
 for (var i = 0; i < 200; i++) {
   randomNumbers.push( Math.random() );
 }
 
-var binCounter = d3.layout.histogram();
+var binCounter = d3.layout.histogram().bins(100).range([0,1]);
 var uniformBins = binCounter(randomNumbers);
+histogram(uniformBins);
+
+var binCounts = uniformBins.map(
+	function(bin) {
+		return bin.length;
+	}
+);
+
+var metaBinCounter = d3.layout.histogram(10).range([0,10]);
+histogram(metaBinCounter(binCounts));
+histogram(metaBinCounter(poissons));
 
 </script>
 
