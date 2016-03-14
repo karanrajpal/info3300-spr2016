@@ -114,7 +114,18 @@ d3.select("#sample").on("click", function () {
 	};
 	
 	// Construct a random network
-	
+	for (var i=0; i < numEdges; i++) {
+		graph.nodes.push({});
+	}
+
+	for (var i = 0; i < numEdges; i++) {
+		graph.links.push({
+			source: randomNode(),
+			target: randomNode()
+		});
+	}
+
+	numEdges -= 1;
 	
 			 
 	var force = d3.layout.force()
@@ -130,6 +141,8 @@ d3.select("#sample").on("click", function () {
 	link.enter()
 	.append("line")
 	.attr("class", "link");
+
+	link.exit().remove();
  
 	var node = svg.selectAll("circle")
 	 .data(graph.nodes);
@@ -150,9 +163,14 @@ d3.select("#sample").on("click", function () {
 	 node.attr("cx", function(d) { return d.x; })
 	     .attr("cy", function(d) { return d.y; });
 	});
- 
-});
 
+	var nodeDegrees = graph.nodes.map(function (node) {
+		return node.weight;
+	});
+	console.log(d3.mean(nodeDegrees),d3.variance(nodeDegrees));
+	console.log(degreeCounter(nodeDegrees));
+	histogram(degreeCounter(nodeDegrees));
+});
 
 </script>
 
