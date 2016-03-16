@@ -45,8 +45,8 @@ var yScale = d3.scale.linear()
 var probabilityInfected = 0.05;
 
 // Conditional probabilities
-var positiveGivenInfected = 0.9;
-var positiveGivenNotInfected = 0.05
+var positiveGivenInfected = 0.35;
+var positiveGivenNotInfected = 0.35;
 
 // We'll use the x coordinate to decide if a patient is infected.
 // If the point is to the left of the imaginary line, it has the condition.
@@ -81,6 +81,7 @@ function addPatient() {
 	.attr("r", 5);
 	
 	circle
+	.transition().duration(500)
 	.attr("cx", xScale(patient.disease))
 	.attr("cy", yScale(patient.test))
 	.attr("opacity", 0.7)
@@ -88,8 +89,10 @@ function addPatient() {
 	.attr("fill", isInfected(patient) ? "red" : "black")
 	.attr("stroke", isPositive(patient) ? "orange" : "");
 
-	var infected = [];
-	var notInfected = [];
+	var infected = population.filter(isInfected);
+	var notInfected = population.filter(function(d) {
+		return !isInfected(d);
+	});
 
 	var infectedPositive = [];
 	d3.select("#truepos").text(infectedPositive.length);
@@ -103,7 +106,7 @@ function addPatient() {
 }
 
 
-
+setInterval(addPatient,100);
 </script>
 
 <h3>Discussion: On the Ball (Times of Oman)</h3>
