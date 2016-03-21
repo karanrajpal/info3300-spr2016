@@ -164,6 +164,16 @@ function update() {
 	logRatioLines.exit().remove();
 	
 	// Display a line from the center to the location of each token.
+	logRatioLines.attr("x1",xScale(0))
+		.attr("x2", function(w){
+			return xScale(logProb(w,rightUser) - logProb(w,leftUser));
+		})
+		.attr("y1", function(w){
+			return yScale(wordCounts[w].total);
+		})
+		.attr("y2", function(w){
+			return yScale(wordCounts[w].total);
+		})
 }
 
 function display() {
@@ -174,7 +184,7 @@ function display() {
 		var leftProbability = prob(w, leftUser);
 		var rightProbability = prob(w, rightUser);
 		
-		return xScale(Math.log(rightProbability / leftProbability)); 
+		return xScale(Math.log(rightProbability) - Math.log(leftProbability)); 
 	});
 	
 }
