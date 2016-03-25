@@ -118,9 +118,14 @@ function moveMeans() {
 	centroids.forEach(function (centroid, i) {
 		var assignedPoints = 
 			points.filter(function (point) { return point.cluster == i; });
-		
+		// debugger;
 		centroid.x = d3.mean(assignedPoints, function (point) { return point.x; });
 		centroid.y = d3.mean(assignedPoints, function (point) { return point.y; });
+		if(centroid.x===undefined || centroid.y===undefined ) {
+			var randomPoint = points[Math.floor(Math.random()*100%points.length)];
+			centroid.x = randomPoint.x;
+			centroid.y = randomPoint.y;
+		}
 	});
 	
 	lines.transition().duration(1000).attr("x2", function (point) {
