@@ -41,7 +41,7 @@ d3.csv("health.csv", function (error, data) {
 	points = countries.map(function (country) {
 		// Create shorter variable names
 		return {
-			x: Number(country["Doctors, per 10,000 population"]),
+			x: Math.log(Number(country["Doctors, per 10,000 population"])),
 		 	y: Number(country["Health spending, % of GDP"]),
 			label: country["Location"]
 		};
