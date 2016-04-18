@@ -67,7 +67,7 @@ var realSlope = 0.5;
 var realIntercept = 0.0;
 
 d3.select("#generate").on("click", function () {
-	var point = generateLinear(gaussian(), realSlope, realIntercept, 0.3);
+	var point = generateLinear(gaussian(), realSlope, realIntercept, 1.2);
 	addPoint(point);
 })
 
